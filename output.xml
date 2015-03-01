@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:WSMatching xmlns:ns2="http://www.kth.se/ict/id2208/Matching" xmlns:ns3="http://www.kth.se/ict/web/services/project1/output/">
+    <ns3:Macthing>
+        <ns3:WsScore>NaN</ns3:WsScore>
+    </ns3:Macthing>
+</ns2:WSMatching>
