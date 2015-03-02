@@ -21,10 +21,9 @@ public class Test_MyOntManager {
 	private static OWLOntologyManager manager = null;
 	private static OWLOntology ontology = null;
 	private static Reasoner reasoner = null;
-	private static String ontLocation = "file:///media/D664BD5E64BD4253/PWS/2013/project/data/travel.owl";
+	private static String ontLocation = "file:///home/alex/workspace/Id2208Matching/data/travel.owl";
 	private static MyOntManager ontsum = null;
-
-
+        
 	@BeforeClass
 	public static void initializeOntology() {
 		ontsum = new  MyOntManager();

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:WSMatching xmlns:ns2="http://www.kth.se/ict/id2208/Matching" xmlns:ns3="http://www.kth.se/ict/web/services/project1/output/">
+    <ns3:Macthing>
+        <ns3:OutputServiceName>Academic-item-numberPublicationauthorService</ns3:OutputServiceName>
+        <ns3:InputServiceName>AuthorMonographtaxfreepriceService</ns3:InputServiceName>
+        <ns3:MacthedOperation>
+            <ns3:OutputOperationName>get_PUBLICATION_AUTHOR</ns3:OutputOperationName>
+            <ns3:InputOperationName>get_MONOGRAPH_TAXFREEPRICE</ns3:InputOperationName>
+            <ns3:OpScore>1.0</ns3:OpScore>
+            <ns3:MacthedElement>
+                <ns3:OutputElement>_AUTHOR</ns3:OutputElement>
+                <ns3:InputElement>_AUTHOR</ns3:InputElement>
+                <ns3:Score>1.0</ns3:Score>
+            </ns3:MacthedElement>
+            <ns3:MacthedElement>
+                <ns3:OutputElement>AuthorType</ns3:OutputElement>
+                <ns3:InputElement>AuthorType</ns3:InputElement>
+                <ns3:Score>1.0</ns3:Score>
+            </ns3:MacthedElement>
+        </ns3:MacthedOperation>
+        <ns3:WsScore>1.0</ns3:WsScore>
+    </ns3:Macthing>
+</ns2:WSMatching>

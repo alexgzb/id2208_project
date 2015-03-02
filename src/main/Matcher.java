@@ -19,10 +19,20 @@ import java.util.List;
  */
 public class Matcher {
 
-    public Matcher() {
+    private final double threshold = 0.8;
+
+    public static void main(String[] args) {
+        Matcher matcher = new Matcher();
+        SemanticMatcher semMatcher = new SemanticMatcher();
+
+        String fileOutput = "sawsdl/author_bookmaxprice_service.wsdl";
+        String fileInput = "sawsdl/author_booktaxedprice_service.wsdl";
+
+        matcher.matcher(fileOutput, fileInput, semMatcher);
+
     }
 
-    public WSMatchingType matcher(String fileOutput, String fileInput) {
+    public WSMatchingType matcher(String fileOutput, String fileInput, SemanticMatcher semMatcher) {
 
 //        // ADD THE FILENAMES
 //        String fileOutput = "drink.wsdl";
@@ -66,6 +76,10 @@ public class Matcher {
             // GET ALL ELEMENTS FOR THE OPERATION
             outputElements = NewParser.getOutputElements(out);
 
+            // Get all elementTypes of non primary type
+            ArrayList<String> outputElementTypes = NewParser.getOutputElementsType(out);
+            System.err.println("Size of out types " + outputElementTypes.size());
+
             // NUMBER OF ELEMENTS IN THE OPERATION
             outSize = outputElements.size();
 
@@ -78,11 +92,15 @@ public class Matcher {
                 // GET ALL THE ELEMENTS OF THE OPERATION
                 inputElements = NewParser.getInputElements(in);
 
+                // GET ALL THE Types
+                ArrayList<String> inputElementTypes = NewParser.getInputElementsType(in);
+                System.err.println("Size of out types " + inputElementTypes.size());
+
                 // NUMBER OF ELEMENTS IN THE OPERATION
                 inSize = inputElements.size();
 
                 // IF OUTPUT OPERATIONS NUMBER OF ELEMENTS MATCHES INPUT
-                if (outSize == inSize) {
+                if (/*outSize == inSize*/true) {
                     System.out.println("MATCHED NUMBER OF ELEMENTS ");
 
                     // TO CALCULATE THE AVERAGE ELEMENTS SCORE
@@ -98,34 +116,75 @@ public class Matcher {
                         // INNER LOOP ELEMENTS
                         for (String inputElement : inputElements) {
 
-                            double score;
-                            score = EditDistance.getSimilarity(outputElement,
+                            double scoreSynt;
+
+                            scoreSynt = EditDistance.getSimilarity(outputElement,
                                     inputElement);
                             System.out.println("TESTING: OUTPUTELEMENT="
                                     + outputElement + " INPUTELEMENT="
-                                    + inputElement + " SCORE=" + score);
-                            if (score > 0.8) {
+                                    + inputElement + " SCORE=" + scoreSynt);
 
-                                totalElementsScore += score;
+                            if (scoreSynt > threshold) {
+
+                                totalElementsScore += scoreSynt;
                                 totalElementsMatches++;
 
                                 MatchedElementType matchElement;
                                 matchElement = new MatchedElementType();
                                 matchElement.setOutputElement(outputElement);
                                 matchElement.setInputElement(inputElement);
-                                matchElement.setScore(score);
+                                matchElement.setScore(scoreSynt);
                                 matchedElements.add(matchElement);
 
-                                System.out.println("FOUND MATCH: "
+                                System.out.println("FOUND SYNTACTIC MATCH: "
                                         + "OUTPUTELEMENT=" + outputElement
                                         + " INPUTELEMENT=" + inputElement
-                                        + " SCORE=" + score);
+                                        + " SCORE=" + scoreSynt);
 
                             }
 
                         }
 
                     }
+
+                    /* REMOVE COMMENT FOR SEMANTIC MATCHING 
+                    for (String outputElementType : outputElementTypes) {
+
+                        for (String inputElementType : inputElementTypes) {
+                            double scoreSem;
+                            scoreSem = semMatcher.findMatching(outputElementType, inputElementType);
+
+                            System.out.println("TESTING SEMANTIC MATCH: "
+                                    + "OUTPUTELEMENT=" + outputElementType
+                                    + " INPUTELEMENT=" + inputElementType
+                                    + " SCORE=" + scoreSem);
+
+                            if (scoreSem > 0.5) {
+
+                                totalElementsScore += scoreSem;
+                                totalElementsMatches++;
+
+                                MatchedElementType matchElement;
+                                matchElement = new MatchedElementType();
+                                matchElement.setOutputElement(outputElementType);
+                                matchElement.setInputElement(inputElementType);
+                                matchElement.setScore(scoreSem);
+                                matchedElements.add(matchElement);
+
+                                System.out.println("FOUND SEMANTIC MATCH: "
+                                        + "OUTPUTELEMENT=" + outputElementType
+                                        + " INPUTELEMENT=" + inputElementType
+                                        + " SCORE=" + scoreSem);
+
+                            }
+                            //System.out.println("!!!!!!!!!!!!!!!+++++ SEMANTIC SCORE " + scoreSem);
+
+                        }
+
+                    }
+                    
+                    */
+
                     // STORE THE MATCHED ELEMENTS FOR THE OPERATIONS
                     if (matchedElements.size() > 0) {
                         System.out.println("ADDING MATCHED OPERATION");
@@ -144,7 +203,7 @@ public class Matcher {
                     }
                 } else {
                     System.out.println("NUMBER OF ELEMENTS DID NOT MATCH "
-                            + "outpuElements= " 
+                            + "outpuElements= "
                             + outSize + " inputElements= " + inSize);
                 }
             }//END OF INNER FOR LOOP

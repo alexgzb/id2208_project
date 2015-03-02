@@ -2,6 +2,7 @@ package main;
 
 import generated.WSMatchingType;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -25,11 +26,58 @@ public class Main {
 
     public static void main(String[] args) {
         Matcher matcher = new Matcher();
+        SemanticMatcher semMatcher = new SemanticMatcher();
+
+        File folder = new File("sawsdl");
+        File[] listOfObjects = folder.listFiles();
+        int files = 0;
+        ArrayList<File> listOfFiles = new ArrayList<>();
+
+        /*
+         for (int i = 0; i < listOfObjects.length; i++) {
+         if (listOfObjects[i].isFile()) {
+         //System.out.println("FILE " + listOfObjects[i].getAbsolutePath());
+         listOfFiles.add(listOfObjects[i]);
+         }
+         }
+         for (File outputFile : listOfFiles) {
+         for (File inputFile : listOfFiles) {
+         int i = 0;
+         if (!outputFile.equals(inputFile)) {
+
+         String fileOutput = outputFile.getAbsolutePath();
+         String fileInput = inputFile.getAbsolutePath();
+
+         //String fileOutput = "out.wsdl";
+         //String fileInput = "in.wsdl";
+         // IF there are Syntactic matches export them to the file
+         WSMatchingType wsMatch = matcher.matcher(fileOutput, fileInput, semMatcher);
+
+         if (wsMatch != null) {
+         exportToFile(wsMatch, i + "output111.xml");
+         } else {
+         System.err.println("NO MATCHES FOUND");
+         }
+
+         }
+
+         }
+
+         }
+         */
+        
+        
+//        String fileOutput = "sawsdl/academic-item-number_publicationauthor_service.wsdl";
+//        String fileInput = "sawsdl/AuthorMonographtaxfreepriceService.wsdl";
+
         String fileOutput = "drink.wsdl";
         String fileInput = "wine.wsdl";
-        WSMatchingType wsMatch = matcher.matcher(fileOutput, fileInput);
+        
+
+        // IF there are Syntactic matches export them to the file
+        WSMatchingType wsMatch = matcher.matcher(fileOutput, fileInput,semMatcher);
         if (wsMatch != null) {
-            exportToFile(wsMatch);
+            exportToFile(wsMatch, "output111.xml");
         } else {
             System.err.println("NO MATCHES FOUND");
         }
@@ -44,9 +92,9 @@ public class Main {
 
     }
 
-    public static void exportToFile(WSMatchingType wSMatchingType) {
+    public static void exportToFile(WSMatchingType wSMatchingType, String filename) {
         try {
-            File outputFile = new File("output111.xml");
+            File outputFile = new File(filename);
             JAXBContext context = JAXBContext.newInstance(
                     wSMatchingType.getClass().getPackage().getName());
             Marshaller marshaller = context.createMarshaller();

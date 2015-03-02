@@ -22,7 +22,7 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 <element name="Id" type="id"/>
 <element name="Country" type="xsd:string"/>
 <element name="Price" type="xsd:double"/>
-<element type="xsd:string" name="Region"/>
+<element name="Region" type="xsd:string"/>
 <element name="Company" type="xsd:string"/>
 </all>
 </complexType>
